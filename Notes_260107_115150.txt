@@ -1,0 +1,113 @@
+import java.awt.*;
+import java.awt.event.*;
+
+// AWT application inherits the top-level Container java.awt.Frame
+public class JobRegistrationFormAWT extends Frame implements ActionListener {
+
+    // Components of the form
+    Label lblTitle, lblName, lblEmail, lblGender, lblExperience, lblPlatform;
+    TextField txtName, txtEmail, txtExperience;
+    CheckboxGroup cbgGender;
+    Checkbox chkMale, chkFemale;
+    Choice choicePlatform;
+    Button btnSubmit, btnClear;
+    TextArea txtOutput;
+
+    public JobRegistrationFormAWT() {
+        super("Job Registration Form (AWT)");
+        
+        // Use a FlowLayout for simplicity in this example
+        // For complex layouts, GridBagLayout or others might be better
+        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10)); 
+        setSize(400, 500); // Set the size of the frame
+        setVisible(true); // Make the frame visible
+        
+        // Handle window close event
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
+
+        // Initialize components
+        lblTitle = new Label("Job Application Form");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 20)); // Set font for title
+        add(lblTitle);
+        
+        lblName = new Label("Name:");
+        txtName = new TextField(25); // 25 columns width
+        add(lblName);
+        add(txtName);
+
+        lblEmail = new Label("Email:");
+        txtEmail = new TextField(25);
+        add(lblEmail);
+        add(txtEmail);
+
+        lblGender = new Label("Gender:");
+        cbgGender = new CheckboxGroup();
+        chkMale = new Checkbox("Male", cbgGender, false);
+        chkFemale = new Checkbox("Female", cbgGender, false);
+        add(lblGender);
+        add(chkMale);
+        add(chkFemale);
+
+        lblExperience = new Label("Experience (Years):");
+        txtExperience = new TextField(5); // 5 columns width
+        add(lblExperience);
+        add(txtExperience);
+
+        lblPlatform = new Label("Preferred Platform:");
+        choicePlatform = new Choice();
+        choicePlatform.add("Select One");
+        choicePlatform.add("Java");
+        choicePlatform.add("Python");
+        choicePlatform.add(".NET");
+        add(lblPlatform);
+        add(choicePlatform);
+
+        btnSubmit = new Button("Submit");
+        btnClear = new Button("Clear");
+        // Register action listeners for buttons
+        btnSubmit.addActionListener(this); 
+        btnClear.addActionListener(this);
+        add(btnSubmit);
+        add(btnClear);
+
+        txtOutput = new TextArea(10, 40); // 10 rows, 40 columns
+        txtOutput.setEditable(false); // Make text area read-only
+        add(txtOutput);
+    }
+
+    // Event handling method
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnSubmit) {
+            String name = txtName.getText();
+            String email = txtEmail.getText();
+            String experience = txtExperience.getText();
+            String gender = (cbgGender.getSelectedCheckbox() != null) ? cbgGender.getSelectedCheckbox().getLabel() : "N/A";
+            String platform = choicePlatform.getSelectedItem();
+
+            String outputMsg = "Registration Details:\n" +
+                               "Name: " + name + "\n" +
+                               "Email: " + email + "\n" +
+                               "Gender: " + gender + "\n" +
+                               "Experience: " + experience + " years\n" +
+                               "Platform: " + platform;
+            
+            txtOutput.setText(outputMsg);
+        } else if (e.getSource() == btnClear) {
+            txtName.setText("");
+            txtEmail.setText("");
+            txtExperience.setText("");
+            cbgGender.setSelectedCheckbox(null);
+            choicePlatform.select(0); // Select the first item ("Select One")
+            txtOutput.setText("");
+        }
+    }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        new JobRegistrationFormAWT();
+    }
+}
